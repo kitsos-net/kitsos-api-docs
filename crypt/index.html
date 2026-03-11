@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Kitsos API Docs - Crypt API</title>
+  <title>Crypt API – Kitsos Docs</title>
   <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css">
   <link rel="stylesheet" href="/assets/custom.css">
 </head>
@@ -17,9 +17,9 @@
       dom_id: '#swagger-ui',
       presets: [
         SwaggerUIBundle.presets.apis,
-        SwaggerUIStandalonePreset
+        SwaggerUIStandalonePreset        // ← das ist der entscheidende Teil
       ],
-      layout: "StandaloneLayout",
+      layout: "StandaloneLayout",        // ← und das hier
       deepLinking: true
     })
   </script>
