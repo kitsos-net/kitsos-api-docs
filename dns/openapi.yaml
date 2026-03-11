@@ -1,0 +1,219 @@
+openapi: 3.0.3
+x-stoplight:
+  id: p0n0oe65v2x7y
+info:
+  title: Cloudflare Worker DNS Resolver API
+  version: 1.0.0
+  description: |
+    Eine HTTP-API für DNS-Auflösungen, betrieben durch einen Cloudflare Worker.
+    Unterstützt sowohl vollständige rekursive DNS-Auflösung (Root -> TLD -> Authoritative) 
+    als auch direktes Forwarding an spezifische Upstream-DNS-Server über TCP Port 53.
+  contact:
+    name: Kitsos
+    url: 'https://kitsos.net/contact?source=api'
+    email: support@services.kitsos.net
+  termsOfService: 'https://kitsos.net/terms'
+  license:
+    name: ''
+    url: ''
+servers:
+  - url: 'https://api.kitsos.net/dns'
+    description: Production Server
+  - url: 'https://dns.api.kitsos.net'
+    description: Production Server - direct domain
+paths:
+  /dns:
+    get:
+      summary: Rekursive DNS-Auflösung
+      description: Löst den angegebenen Domainnamen rekursiv auf. Der Worker startet bei den Root-Servern und arbeitet sich bis zum autoritativen Nameserver vor.
+      parameters:
+        - $ref: '#/components/parameters/NameParam'
+        - $ref: '#/components/parameters/TypeParam'
+        - $ref: '#/components/parameters/CacheParam'
+      responses:
+        '200':
+          description: Erfolgreiche DNS-Auflösung
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DnsResponse'
+        '400':
+          description: Fehlender oder ungültiger Parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Interner Serverfehler oder Fehler bei der DNS-Auflösung
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-stoplight:
+        id: joep6owva5n7i
+  '/dns/{provider}':
+    get:
+      summary: Forwarding DNS-Auflösung (Spezifischer Provider)
+      description: 'Leitet die DNS-Anfrage direkt an einen vorkonfigurierten DNS-Server weiter (z. B. Google, Cloudflare), ohne die eigene Rekursion zu nutzen.'
+      parameters:
+        - name: provider
+          in: path
+          required: true
+          description: Der Name des Upstream-DNS-Providers.
+          schema:
+            type: string
+            enum:
+              - google
+              - cloudflare
+              - quad9
+              - local
+        - $ref: '#/components/parameters/NameParam'
+        - $ref: '#/components/parameters/TypeParam'
+        - $ref: '#/components/parameters/CacheParam'
+      responses:
+        '200':
+          description: Erfolgreiche DNS-Auflösung
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DnsResponse'
+        '400':
+          description: Fehlender oder ungültiger Parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Interner Serverfehler
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      x-stoplight:
+        id: ry3tbbubndneq
+components:
+  parameters:
+    NameParam:
+      name: name
+      in: query
+      required: true
+      description: Der aufzulösende Domainname (z. B. example.com).
+      schema:
+        type: string
+        example: example.com
+    TypeParam:
+      name: type
+      in: query
+      required: false
+      description: Der DNS-Eintragstyp (Standard ist A).
+      schema:
+        type: string
+        default: A
+        enum:
+          - A
+          - AAAA
+          - CNAME
+          - NS
+          - TXT
+          - SOA
+    CacheParam:
+      name: cache
+      in: query
+      required: false
+      description: 'Setze auf `false`, um die Browser-/Proxy-Zwischenspeicherung zu deaktivieren.'
+      schema:
+        type: string
+        default: 'true'
+        enum:
+          - 'true'
+          - 'false'
+  schemas:
+    DnsResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Die ID der DNS-Anfrage.
+          example: 12345
+        flags:
+          type: integer
+          description: Die rohen DNS-Flags als Integer.
+          example: 33152
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/DnsQuestion'
+        answers:
+          type: array
+          items:
+            $ref: '#/components/schemas/DnsRecord'
+        authorities:
+          type: array
+          items:
+            $ref: '#/components/schemas/DnsRecord'
+        additionals:
+          type: array
+          items:
+            $ref: '#/components/schemas/DnsRecord'
+        mode:
+          type: string
+          description: 'Der Modus, der für die Auflösung verwendet wurde.'
+          enum:
+            - recursive
+            - forwarding
+          example: forwarding
+        resolver:
+          type: string
+          description: Die IP-Adresse des verwendeten Upstream-Resolvers (nur im Forwarding-Modus).
+          example: 8.8.8.8
+        execution_time_ms:
+          type: integer
+          description: Die Dauer der Ausführung im Worker in Millisekunden.
+          example: 42
+      x-stoplight:
+        id: kd9hjxbqwutfd
+    DnsQuestion:
+      type: object
+      properties:
+        name:
+          type: string
+          example: example.com
+        type:
+          type: integer
+          description: Der numerische DNS-Typ (z.B. 1 für A).
+          example: 1
+        class:
+          type: integer
+          description: Die DNS-Klasse (1 für IN/Internet).
+          example: 1
+      x-stoplight:
+        id: fugrvm2cjc5f2
+    DnsRecord:
+      type: object
+      properties:
+        name:
+          type: string
+          example: example.com
+        type:
+          type: string
+          description: Der Typ des Records als String.
+          example: A
+        ttl:
+          type: integer
+          description: Time to Live in Sekunden.
+          example: 3600
+        data:
+          type: string
+          description: Der aufgelöste Wert (z.B. eine IP-Adresse).
+          example: 93.184.216.34
+      x-stoplight:
+        id: ap3m7eszfyqmp
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Fehlermeldung
+          example: Parameter 'name' fehlt.
+      x-stoplight:
+        id: vt4x41mj1eqf3
