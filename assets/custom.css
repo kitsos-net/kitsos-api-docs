@@ -1,0 +1,21 @@
+@font-face {
+  font-family: 'Roboto';
+  src: url('https://files.kitsos.net/fonts/kitsos-default/default.woff2') format('woff2');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('https://files.kitsos.net/fonts/kitsos-default/default.woff2') format('woff2');
+  font-weight: 700;
+}
+
+.swagger-ui, .swagger-ui * {
+  font-family: 'Roboto', sans-serif !important;
+}
+.swagger-ui .topbar {
+  background-color: #03a9f4; /* Deine Farbe */
+}
+.swagger-ui .topbar-wrapper img {
+  content: url('https://files.kitsos.net/logos/kitsos.png');
+  height: 36px;
+}
