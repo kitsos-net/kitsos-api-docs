@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DNS API – Kitsos Docs</title>
+  <link rel="stylesheet" href="/assets/swagger/swagger-ui.css">
+  <link rel="stylesheet" href="/assets/custom.css">
+</head>
+<body>
+  <div id="swagger-ui"></div>
+  <script src="/assets/swagger/swagger-ui-bundle.js"></script>
+  <script src="/assets/swagger/swagger-ui-standalone-preset.js"></script>
+  <script>
+    SwaggerUIBundle({
+      url: "./openapi.yaml",
+      dom_id: '#swagger-ui',
+      presets: [
+        SwaggerUIBundle.presets.apis,
+        SwaggerUIStandalonePreset
+      ],
+      layout: "StandaloneLayout",
+      deepLinking: true
+    })
+  </script>
+</body>
+</html>
