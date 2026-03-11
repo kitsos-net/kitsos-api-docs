@@ -23,13 +23,11 @@ paths:
   /pass:
     get:
       summary: /pass
-      tags: []
       responses: {}
       operationId: get-pass
       x-stoplight:
         id: rfiv3j6mbbob6
       description: Generates a secure password.
-    servers: []
     parameters:
       - schema:
           type: number
