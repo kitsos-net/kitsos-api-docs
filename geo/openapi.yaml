@@ -1,0 +1,33 @@
+openapi: 3.1.0
+x-stoplight:
+  id: 87d72bfkqlnhn
+info:
+  title: kitsos-geo-api
+  version: '1.0'
+  contact:
+    name: Kitsos
+    email: support@services.kitsos.net
+    url: 'https://kitsos.net/contact?source?api'
+  termsOfService: 'https://kitsos.net/terms'
+  summary: Kitsos Geo API
+  license:
+    identifier: MIT
+    name: MIT
+servers:
+  - url: 'https://api.kitsos.net/geo'
+    description: ''
+  - url: 'https://geo.api.kitsos.net'
+    description: ''
+paths:
+  /:
+    get:
+      summary: /
+      tags: []
+      responses: {}
+      operationId: get
+      x-stoplight:
+        id: kg70eyxw11480
+      description: Returns location information based on your current IP address.
+components:
+  schemas: {}
+  securitySchemes: {}
