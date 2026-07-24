@@ -1,1 +1,1 @@
-# kitsos-api-docs
+# Kitsos API Docs
