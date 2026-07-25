@@ -1,329 +1,86 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Kitsos Verify API - OpenAPI Documentation</title>
-
-    <!-- Swagger CSS -->
-    <link id="swagger-css" rel="stylesheet"
-          href="https://cdn.kitsos.net/api/swagger/5.29.1/swagger-ui.min.css">
-
-    <!-- Favicons -->
-    <link rel="icon" type="image/png"
-          href="https://cdn.kitsos.net/logos/fav/favicon-96x96.png">
-
-    <style>
-        body {
-            margin: 0;
-            background: #f8fafc;
-        }
-
-        .topbar {
-            display: none;
-        }
-
-        .swagger-ui .opblock {
-            border-radius: 10px;
-        }
-
-        .swagger-ui .opblock-summary {
-            padding: 10px;
-        }
-    </style>
-
-</head>
-
-<body>
-
-<div id="openapi"></div>
-
-
-<script>
-
-const CDNS = [
-    "https://cdn.kitsos.net",
-    "https://cdn2.kitsos.net",
-    "https://cdn3.kitsos.net"
-];
-
-
-function randomBackup(exclude = []) {
-
-    const available = CDNS.filter(
-        cdn => !exclude.includes(cdn)
-    );
-
-    return available[
-        Math.floor(Math.random() * available.length)
-    ];
-
-}
-
-
-
-
-// Schnellstes CDN für Datei ermitteln
-function getFastest(urlPath) {
-
-    return new Promise((resolve, reject) => {
-
-
-        let finished = false;
-        let started = [];
-
-
-        function request(cdn) {
-
-            started.push(cdn);
-
-
-            fetch(cdn + urlPath, {
-                method: "GET",
-                cache: "no-cache"
-            })
-
-            .then(response => {
-
-                if (!response.ok)
-                    throw new Error();
-
-
-                if (!finished) {
-
-                    finished = true;
-
-                    resolve(cdn + urlPath);
-
-                }
-
-            })
-
-            .catch(() => {});
-
-        }
-
-
-
-        // Haupt-CDN sofort
-        request(CDNS[0]);
-
-
-
-        // Nach 500ms Backup starten
-        setTimeout(() => {
-
-
-            if (finished)
-                return;
-
-
-            request(
-                randomBackup(started)
-            );
-
-
-        }, 500);
-
-
-
-        // Falls noch nichts antwortet -> letzter CDN
-        setTimeout(() => {
-
-
-            if (finished)
-                return;
-
-
-            CDNS
-            .filter(cdn => !started.includes(cdn))
-            .forEach(request);
-
-
-        }, 1500);
-
-
-
-        setTimeout(() => {
-
-
-            if (!finished)
-                reject("Kein CDN erreichbar");
-
-
-        }, 8000);
-
-
-    });
-
-}
-
-
-
-
-
-// CDN Loader für CSS/JS
-function loadCDNFile(path, type) {
-
-
-    return getFastest(path)
-
-    .then(url => {
-
-
-        return new Promise(resolve => {
-
-
-            if (type === "css") {
-
-
-                document.getElementById("swagger-css").href = url;
-
-                resolve();
-
-            }
-
-
-            if (type === "js") {
-
-
-                const script =
-                    document.createElement("script");
-
-
-                script.src = url;
-
-
-                script.onload = resolve;
-
-
-                document.head.appendChild(script);
-
-            }
-
-
-        });
-
-
-    });
-
-
-}
-
-
-
-
-async function loadSwagger() {
-
-
-    await loadCDNFile(
-        "/api/swagger/5.29.1/swagger-ui-bundle.min.js",
-        "js"
-    );
-
-
-    await loadCDNFile(
-        "/api/swagger/5.29.1/swagger-ui-standalone-preset.min.js",
-        "js"
-    );
-
-
-    initSwagger();
-
-}
-
-
-
-
-
-function initSwagger() {
-
-
-    if (
-        typeof SwaggerUIBundle === "undefined" ||
-        typeof SwaggerUIStandalonePreset === "undefined"
-    ) {
-
-        return setTimeout(initSwagger,50);
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0768bb">
+  <meta name="color-scheme" content="light dark">
+  <title>Kitsos Verify API – Dokumentation</title>
+  <link id="swagger-css" rel="stylesheet" href="https://cdn.kitsos.net/api/swagger/5.29.1/swagger-ui.min.css">
+  <link rel="icon" type="image/png" href="https://cdn.kitsos.net/logos/fav/favicon-96x96.png">
+  <link rel="preconnect" href="https://cdn.kitsos.net" crossorigin>
+  <style>
+    @font-face { font-family: "Kitsos Default"; src: url("https://cdn.kitsos.net/fonts/kitsos-default/kitsos-default-regular.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+    :root { color-scheme: light dark; --k-primary:#0768bb; --k-primary-hover:#055a9f; --k-primary-soft:#e7f2fc; --k-bg:#f7f9fc; --k-surface:#fff; --k-surface-raised:#fff; --k-text:#111827; --k-text-muted:#52606d; --k-border:#dce5ee; --k-radius-control:10px; --k-radius-card:12px; --k-font:"Kitsos Default",Arial,Helvetica,sans-serif; }
+    @media (prefers-color-scheme:dark) { :root { --k-primary:#03a9f4; --k-primary-hover:#38bdf8; --k-primary-soft:#06314b; --k-bg:#09131d; --k-surface:#101e2a; --k-surface-raised:#162838; --k-text:#f3f7fb; --k-text-muted:#a8b8c8; --k-border:#284052; } }
+    *,*::before,*::after { box-sizing:border-box; }
+    body { margin:0; background:var(--k-bg); color:var(--k-text); font-family:var(--k-font); font-size:16px; line-height:1.5; }
+    .app-header { display:flex; align-items:center; gap:16px; min-height:72px; padding:12px max(24px,calc((100vw - 1440px)/2)); background:var(--k-surface); border-bottom:1px solid var(--k-border); }
+    .app-header__logo { width:48px; height:48px; flex:0 0 auto; }
+    .app-header__logo img { display:block; width:100%; height:100%; object-fit:contain; }
+    .app-header__title { margin:0; font-size:22px; font-weight:600; line-height:1.36; }
+    .app-header__subtitle { margin:0; color:var(--k-text-muted); font-size:14px; line-height:20px; }
+    .topbar { display:none; }
+    .swagger-ui { color:var(--k-text); font-family:var(--k-font); }
+    .swagger-ui .wrapper { max-width:1120px; padding:0 24px; }
+    .swagger-ui .info { margin:32px 0; }
+    .swagger-ui .info .title,.swagger-ui .info h1,.swagger-ui .info h2,.swagger-ui .info h3 { color:var(--k-text); font-family:var(--k-font); }
+    .swagger-ui .info .title { font-size:36px; line-height:44px; font-weight:700; }
+    .swagger-ui .info p,.swagger-ui .info li,.swagger-ui .renderedMarkdown p { color:var(--k-text-muted); }
+    .swagger-ui .info a,.swagger-ui a { color:var(--k-primary); }
+    .swagger-ui .scheme-container { padding:16px 0; background:transparent; box-shadow:none; }
+    .swagger-ui .opblock-tag,.swagger-ui .opblock-tag:hover { color:var(--k-text); border-bottom-color:var(--k-border); font-family:var(--k-font); font-size:22px; font-weight:600; }
+    .swagger-ui .opblock,.swagger-ui .opblock.opblock-get,.swagger-ui .opblock.opblock-post,.swagger-ui .opblock.opblock-put,.swagger-ui .opblock.opblock-delete,.swagger-ui .opblock.opblock-patch { margin:0 0 12px; overflow:hidden; border:1px solid var(--k-border); border-radius:var(--k-radius-card); background:var(--k-surface); box-shadow:0 8px 24px rgb(15 35 55 / 10%); }
+    .swagger-ui .opblock-summary { min-height:56px; padding:10px 16px; }
+    .swagger-ui .opblock-summary-method { min-width:76px; border-radius:999px; font-family:var(--k-font); font-weight:700; letter-spacing:.03em; }
+    .swagger-ui .opblock .opblock-summary-path,.swagger-ui .opblock .opblock-summary-description { color:var(--k-text); }
+    .swagger-ui .opblock-body,.swagger-ui .opblock .opblock-body { background:var(--k-surface); }
+    .swagger-ui .opblock-section-header,.swagger-ui .opblock .opblock-section-header { background:var(--k-surface-raised); box-shadow:none; }
+    .swagger-ui .opblock-section-header h4,.swagger-ui label,.swagger-ui .parameter__name { color:var(--k-text); font-family:var(--k-font); }
+    .swagger-ui .parameter__type,.swagger-ui .parameter__in { color:var(--k-text-muted); }
+    .swagger-ui input[type=text],.swagger-ui textarea,.swagger-ui select { min-height:44px; border:1px solid var(--k-border); border-radius:var(--k-radius-control); background:var(--k-surface); color:var(--k-text); font-family:var(--k-font); }
+    .swagger-ui textarea { min-height:120px; }
+    .swagger-ui input:focus,.swagger-ui textarea:focus,.swagger-ui select:focus { border-color:var(--k-primary); box-shadow:0 0 0 3px var(--k-primary-soft); outline:none; }
+    .swagger-ui .btn { min-height:44px; border-radius:var(--k-radius-control); font-family:var(--k-font); font-weight:600; }
+    .swagger-ui .btn.execute { border-color:var(--k-primary); background:var(--k-primary); color:#111827; }
+    .swagger-ui .btn.execute:hover { border-color:var(--k-primary-hover); background:var(--k-primary-hover); color:#111827; }
+    .swagger-ui .btn.authorize { border-color:var(--k-primary); color:var(--k-primary); }
+    .swagger-ui .btn.authorize svg { fill:var(--k-primary); }
+    .swagger-ui .btn:focus-visible,.swagger-ui button:focus-visible,.swagger-ui a:focus-visible { outline:3px solid var(--k-primary-soft); outline-offset:2px; }
+    .swagger-ui .model-box,.swagger-ui .highlight-code { background:var(--k-surface-raised); }
+    .swagger-ui .response-col_status { color:var(--k-text); }
+    .swagger-ui .response-col_description__inner p,.swagger-ui .tab li { color:var(--k-text-muted); }
+    @media (prefers-color-scheme:dark) {
+      .swagger-ui .opblock,.swagger-ui .opblock.opblock-get,.swagger-ui .opblock.opblock-post,.swagger-ui .opblock.opblock-put,.swagger-ui .opblock.opblock-delete,.swagger-ui .opblock.opblock-patch { box-shadow:none; }
+      .swagger-ui .opblock .opblock-summary-path,.swagger-ui .opblock .opblock-summary-description,.swagger-ui .opblock .opblock-section-header h4,.swagger-ui .opblock .parameter__name,.swagger-ui .opblock .response-col_status,.swagger-ui table thead tr th,.swagger-ui table tbody tr td { color:var(--k-text); }
+      .swagger-ui .opblock .parameter__type,.swagger-ui .opblock .parameter__in,.swagger-ui .opblock .response-col_description__inner p,.swagger-ui .opblock .response-col_description__inner div { color:var(--k-text-muted); }
+      .swagger-ui .opblock .opblock-summary-method,.swagger-ui .btn.execute,.swagger-ui .btn.execute:hover { color:#09131d; }
+      .swagger-ui .opblock .tab li,.swagger-ui .opblock .tab li button { color:var(--k-text-muted); }
+      .swagger-ui svg { fill:var(--k-text); }
     }
-
-
-
-    getFastest(
-        "/api/verify/openapi.yaml"
-    )
-
-    .then(openapiUrl => {
-
-
-
-        window.ui = SwaggerUIBundle({
-
-
-            url: openapiUrl,
-
-
-            dom_id:"#openapi",
-
-
-            deepLinking:true,
-
-
-            displayRequestDuration:true,
-
-
-            docExpansion:"list",
-
-
-            defaultModelsExpandDepth:-1,
-
-
-            defaultModelExpandDepth:2,
-
-
-            validatorUrl:null,
-
-
-            presets:[
-
-                SwaggerUIBundle.presets.apis,
-
-                SwaggerUIStandalonePreset
-
-            ],
-
-
-            layout:"StandaloneLayout"
-
-
-        });
-
-
-
-    })
-
-
-    .catch(() => {
-
-
-        document.getElementById("openapi").innerHTML =
-        "OpenAPI konnte nicht geladen werden.";
-
-
-    });
-
-
-}
-
-
-
-
-window.onload = loadSwagger;
-
-
-</script>
-
-
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition-duration:.01ms!important; } }
+    @media (max-width:600px) { .app-header { min-height:64px; padding:8px 16px; } .app-header__logo { width:40px; height:40px; } .app-header__title { font-size:18px; } .swagger-ui .wrapper { padding:0 16px; } .swagger-ui .info .title { font-size:28px; line-height:36px; } }
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <picture class="app-header__logo">
+      <source media="(prefers-color-scheme: dark)" srcset="https://cdn.kitsos.net/logos/k-dark.png">
+      <img src="https://cdn.kitsos.net/logos/k.png" alt="Kitsos">
+    </picture>
+    <div><p class="app-header__title">Verify API</p><p class="app-header__subtitle">Interaktive API-Dokumentation</p></div>
+  </header>
+  <div id="openapi"></div>
+  <script>
+    const CDN = "https://cdn.kitsos.net";
+    function loadScript(path) { return new Promise((resolve, reject) => { const script = document.createElement("script"); script.src = CDN + path; script.onload = resolve; script.onerror = () => reject(new Error("Swagger-Ressource konnte nicht geladen werden.")); document.head.appendChild(script); }); }
+    async function loadSwagger() { try { await loadScript("/api/swagger/5.29.1/swagger-ui-bundle.min.js"); await loadScript("/api/swagger/5.29.1/swagger-ui-standalone-preset.min.js"); initSwagger(); } catch (error) { showError("Die API-Dokumentation konnte nicht initialisiert werden. Bitte lade die Seite erneut."); } }
+    function initSwagger() {
+      if (typeof SwaggerUIBundle === "undefined" || typeof SwaggerUIStandalonePreset === "undefined") return setTimeout(initSwagger, 50);
+      window.ui = SwaggerUIBundle({ url: CDN + "/api/verify/openapi.yaml", dom_id: "#openapi", deepLinking: true, displayRequestDuration: true, docExpansion: "list", defaultModelsExpandDepth: -1, defaultModelExpandDepth: 2, validatorUrl: null, presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset], layout: "StandaloneLayout" });
+    }
+    function showError(message) { document.getElementById("openapi").innerHTML = `<main class="swagger-ui"><section class="info"><p>${message}</p></section></main>`; }
+    window.addEventListener("load", loadSwagger);
+  </script>
 </body>
 </html>
