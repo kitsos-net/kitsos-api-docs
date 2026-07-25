@@ -10,7 +10,7 @@
   <link rel="icon" type="image/png" href="https://cdn.kitsos.net/logos/fav/favicon-96x96.png">
   <link rel="preconnect" href="https://cdn.kitsos.net" crossorigin>
   <style>
-    @font-face { font-family: "Kitsos Default"; src: url("https://cdn.kitsos.net/fonts/kitsos-default/kitsos-default-regular.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+    @font-face { font-family: "Kitsos Default"; src: url("https://cdn.kitsos.net/fonts/kitsos-default/kitsos-default-regular.woff2") format("woff2"),url("https://cdn2.kitsos.net/fonts/kitsos-default/kitsos-default-regular.woff2") format("woff2"),url("https://cdn3.kitsos.net/fonts/kitsos-default/kitsos-default-regular.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
     :root { color-scheme: light dark; --k-primary:#0768bb; --k-primary-hover:#055a9f; --k-primary-soft:#e7f2fc; --k-bg:#f7f9fc; --k-surface:#fff; --k-surface-raised:#fff; --k-text:#111827; --k-text-muted:#52606d; --k-border:#dce5ee; --k-radius-control:10px; --k-radius-card:12px; --k-font:"Kitsos Default",Arial,Helvetica,sans-serif; }
     @media (prefers-color-scheme:dark) { :root { --k-primary:#03a9f4; --k-primary-hover:#38bdf8; --k-primary-soft:#06314b; --k-bg:#09131d; --k-surface:#101e2a; --k-surface-raised:#162838; --k-text:#f3f7fb; --k-text-muted:#a8b8c8; --k-border:#284052; } }
     *,*::before,*::after { box-sizing:border-box; }
@@ -72,12 +72,32 @@
   </header>
   <div id="openapi"></div>
   <script>
-    const CDN = "https://cdn.kitsos.net";
-    function loadScript(path) { return new Promise((resolve, reject) => { const script = document.createElement("script"); script.src = CDN + path; script.onload = resolve; script.onerror = () => reject(new Error("Swagger-Ressource konnte nicht geladen werden.")); document.head.appendChild(script); }); }
-    async function loadSwagger() { try { await loadScript("/api/swagger/5.29.1/swagger-ui-bundle.min.js"); await loadScript("/api/swagger/5.29.1/swagger-ui-standalone-preset.min.js"); initSwagger(); } catch (error) { showError("Die API-Dokumentation konnte nicht initialisiert werden. Bitte lade die Seite erneut."); } }
+    const CDNS = ["https://cdn.kitsos.net", "https://cdn2.kitsos.net", "https://cdn3.kitsos.net"];
+    async function firstAvailable(path) {
+      for (const cdn of CDNS) { try { const response = await fetch(cdn + path, { cache: "no-store" }); if (response.ok) return cdn + path; } catch (_) {} }
+      throw new Error("Keine CDN-Quelle erreichbar.");
+    }
+    function loadScript(path) {
+      return new Promise((resolve, reject) => {
+        let index = 0;
+        const next = () => { if (index === CDNS.length) return reject(new Error("Swagger-Ressource konnte nicht geladen werden.")); const script = document.createElement("script"); script.src = CDNS[index++] + path; script.onload = resolve; script.onerror = next; document.head.appendChild(script); };
+        next();
+      });
+    }
+    function addAssetFallbacks() {
+      document.querySelectorAll("img[src^='https://cdn']").forEach((image) => {
+        const path = new URL(image.currentSrc || image.src).pathname;
+        let index = 1;
+        image.addEventListener("error", () => { if (index < CDNS.length) { image.closest("picture")?.querySelectorAll("source").forEach((source) => source.remove()); image.src = CDNS[index++] + path; } });
+      });
+      const stylesheet = document.getElementById("swagger-css");
+      let index = 1;
+      stylesheet.addEventListener("error", () => { if (index < CDNS.length) stylesheet.href = CDNS[index++] + "/api/swagger/5.29.1/swagger-ui.min.css"; });
+    }
+    async function loadSwagger() { try { addAssetFallbacks(); await loadScript("/api/swagger/5.29.1/swagger-ui-bundle.min.js"); await loadScript("/api/swagger/5.29.1/swagger-ui-standalone-preset.min.js"); window.openapiUrl = await firstAvailable("/api/mail/openapi.yaml"); initSwagger(); } catch (error) { showError("Die API-Dokumentation konnte nicht initialisiert werden. Bitte lade die Seite erneut."); } }
     function initSwagger() {
       if (typeof SwaggerUIBundle === "undefined" || typeof SwaggerUIStandalonePreset === "undefined") return setTimeout(initSwagger, 50);
-      window.ui = SwaggerUIBundle({ url: CDN + "/api/mail/openapi.yaml", dom_id: "#openapi", deepLinking: true, displayRequestDuration: true, docExpansion: "list", defaultModelsExpandDepth: -1, defaultModelExpandDepth: 2, validatorUrl: null, presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset], layout: "StandaloneLayout" });
+      window.ui = SwaggerUIBundle({ url: window.openapiUrl, dom_id: "#openapi", deepLinking: true, displayRequestDuration: true, docExpansion: "list", defaultModelsExpandDepth: -1, defaultModelExpandDepth: 2, validatorUrl: null, presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset], layout: "StandaloneLayout" });
     }
     function showError(message) { document.getElementById("openapi").innerHTML = `<main class="swagger-ui"><section class="info"><p>${message}</p></section></main>`; }
     window.addEventListener("load", loadSwagger);

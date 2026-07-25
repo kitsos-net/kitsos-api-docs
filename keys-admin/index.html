@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0768bb">
   <meta name="color-scheme" content="light dark">
-  <title>Kitsos Utility API – Dokumentation</title>
+  <title>Kitsos Keys Admin API – Dokumentation</title>
   <link id="swagger-css" rel="stylesheet" href="https://cdn.kitsos.net/api/swagger/5.29.1/swagger-ui.min.css">
   <link rel="icon" type="image/png" href="https://cdn.kitsos.net/logos/fav/favicon-96x96.png">
   <link rel="preconnect" href="https://cdn.kitsos.net" crossorigin>
@@ -68,7 +68,7 @@
       <source media="(prefers-color-scheme: dark)" srcset="https://cdn.kitsos.net/logos/k-dark.png">
       <img src="https://cdn.kitsos.net/logos/k.png" alt="Kitsos">
     </picture>
-    <div><p class="app-header__title">Utility API</p><p class="app-header__subtitle">Interaktive API-Dokumentation</p></div>
+    <div><p class="app-header__title">Keys Admin API</p><p class="app-header__subtitle">Interaktive API-Dokumentation</p></div>
   </header>
   <div id="openapi"></div>
   <script>
@@ -94,7 +94,7 @@
       let index = 1;
       stylesheet.addEventListener("error", () => { if (index < CDNS.length) stylesheet.href = CDNS[index++] + "/api/swagger/5.29.1/swagger-ui.min.css"; });
     }
-    async function loadSwagger() { try { addAssetFallbacks(); await loadScript("/api/swagger/5.29.1/swagger-ui-bundle.min.js"); await loadScript("/api/swagger/5.29.1/swagger-ui-standalone-preset.min.js"); window.openapiUrl = await firstAvailable("/api/utility/openapi.yaml"); initSwagger(); } catch (error) { showError("Die API-Dokumentation konnte nicht initialisiert werden. Bitte lade die Seite erneut."); } }
+    async function loadSwagger() { try { addAssetFallbacks(); await loadScript("/api/swagger/5.29.1/swagger-ui-bundle.min.js"); await loadScript("/api/swagger/5.29.1/swagger-ui-standalone-preset.min.js"); window.openapiUrl = await firstAvailable("/api/keys-admin/openapi.yaml"); initSwagger(); } catch (error) { showError("Die API-Dokumentation konnte nicht initialisiert werden. Bitte lade die Seite erneut."); } }
     function initSwagger() {
       if (typeof SwaggerUIBundle === "undefined" || typeof SwaggerUIStandalonePreset === "undefined") return setTimeout(initSwagger, 50);
       window.ui = SwaggerUIBundle({ url: window.openapiUrl, dom_id: "#openapi", deepLinking: true, displayRequestDuration: true, docExpansion: "list", defaultModelsExpandDepth: -1, defaultModelExpandDepth: 2, validatorUrl: null, presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset], layout: "StandaloneLayout" });
