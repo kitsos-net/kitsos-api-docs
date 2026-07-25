@@ -19,8 +19,10 @@
     header { min-height:72px; display:flex; align-items:center; border-bottom:1px solid var(--border); background:var(--surface); }
     .brand { display:flex; align-items:center; gap:14px; color:inherit; text-decoration:none; font-size:20px; font-weight:600; }
     .header-row { display:flex; align-items:center; gap:12px; }
-    .header-actions { display:flex; align-items:center; gap:8px; margin-left:auto; }
-    .header-actions a,.language { min-height:36px; padding:0 10px; border:1px solid var(--border); border-radius:10px; background:var(--surface); color:var(--text); font:600 14px var(--font); text-decoration:none; }
+    .header-actions { display:flex; align-items:center; gap:16px; margin-left:auto; }
+    .header-actions a { color:var(--text); font:600 14px var(--font); text-decoration:none; }
+    .header-actions a:hover { color:var(--primary); text-decoration:underline; text-underline-offset:4px; }
+    .language { min-height:36px; padding:0 4px; border:0; border-bottom:1px solid var(--border); border-radius:0; background:transparent; color:var(--text); font:600 14px var(--font); }
     .brand-logo { width:48px; height:48px; flex:0 0 auto; }
     .brand-logo img { display:block; width:100%; height:100%; object-fit:contain; }
     main { padding:72px 0 80px; }
@@ -49,7 +51,7 @@
           <img src="https://cdn.kitsos.net/logos/k.png" alt="Kitsos">
         </picture>
         <span>Kitsos API Docs</span>
-      </a><nav class="header-actions" aria-label="Schnellzugriff"><a href="https://status.kitsos.net">Status</a><a href="https://kitsos.net/contact">Kontakt</a><select class="language" aria-label="Sprache auswählen"><option value="de" selected>🇩🇪 DE</option><option value="en">🇬🇧 EN</option><option value="el">🇬🇷 EL</option></select></nav></div>
+      </a><nav class="header-actions" aria-label="Schnellzugriff"><a href="https://status.kitsos.net">Status</a><a href="https://kitsos.net/contact">Kontakt</a><select id="language" class="language" aria-label="Sprache auswählen"><option value="de">🇩🇪 DE</option><option value="en">🇬🇧 EN</option><option value="el">🇬🇷 EL</option></select></nav></div>
     </div>
   </header>
   <main class="shell">
@@ -92,6 +94,7 @@
   <footer><div class="shell">© Kitsos · <a href="https://kitsos.net/terms">Nutzungsbedingungen</a> · <a href="https://kitsos.net/privacy">Datenschutzerklärung</a></div></footer>
   <script>
     (() => { const cdns = ["https://cdn.kitsos.net", "https://cdn2.kitsos.net", "https://cdn3.kitsos.net"]; document.querySelectorAll("img[src^='https://cdn']").forEach((image) => { const path = new URL(image.currentSrc || image.src).pathname; let index = 1; image.addEventListener("error", () => { if (index < cdns.length) { image.closest("picture")?.querySelectorAll("source").forEach((source) => source.remove()); image.src = cdns[index++] + path; } }); }); })();
+    (() => { const language = document.querySelector("#language"); const selected = new URLSearchParams(location.search).get("lang") || localStorage.getItem("kitsos-docs-language") || navigator.language.slice(0, 2); language.value = ["de", "en", "el"].includes(selected) ? selected : "de"; document.documentElement.lang = language.value; language.addEventListener("change", () => { localStorage.setItem("kitsos-docs-language", language.value); document.documentElement.lang = language.value; const url = new URL(location.href); url.searchParams.set("lang", language.value); history.replaceState(null, "", url); }); })();
   </script>
 </body>
 </html>
