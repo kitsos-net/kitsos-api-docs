@@ -1,1 +1,94 @@
-/utility, /keys, /mail, /verify
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0768bb">
+  <meta name="color-scheme" content="light dark">
+  <title>Kitsos API Docs</title>
+  <meta name="description" content="Interaktive Dokumentation für die Kitsos APIs.">
+  <link rel="icon" type="image/png" href="https://cdn.kitsos.net/logos/fav/favicon-96x96.png">
+  <link rel="preconnect" href="https://cdn.kitsos.net" crossorigin>
+  <style>
+    @font-face { font-family:"Kitsos Default"; src:url("https://cdn.kitsos.net/fonts/kitsos-default/kitsos-default-regular.woff2") format("woff2"),url("https://cdn2.kitsos.net/fonts/kitsos-default/kitsos-default-regular.woff2") format("woff2"),url("https://cdn3.kitsos.net/fonts/kitsos-default/kitsos-default-regular.woff2") format("woff2"); font-weight:100 900; font-display:swap; }
+    :root { color-scheme:light dark; --primary:#0768bb; --primary-hover:#055a9f; --primary-soft:#e7f2fc; --bg:#f7f9fc; --surface:#fff; --surface-raised:#fff; --text:#111827; --muted:#52606d; --border:#dce5ee; --radius-card:12px; --font:"Kitsos Default",Arial,Helvetica,sans-serif; }
+    @media (prefers-color-scheme:dark) { :root { --primary:#03a9f4; --primary-hover:#38bdf8; --primary-soft:#06314b; --bg:#09131d; --surface:#101e2a; --surface-raised:#162838; --text:#f3f7fb; --muted:#a8b8c8; --border:#284052; } }
+    * { box-sizing:border-box; }
+    body { min-width:320px; margin:0; background:var(--bg); color:var(--text); font:16px/1.5 var(--font); }
+    .shell { width:min(1120px,calc(100% - 48px)); margin:0 auto; }
+    header { min-height:72px; display:flex; align-items:center; border-bottom:1px solid var(--border); background:var(--surface); }
+    .brand { display:flex; align-items:center; gap:14px; color:inherit; text-decoration:none; font-size:20px; font-weight:600; }
+    .brand-logo { width:48px; height:48px; flex:0 0 auto; }
+    .brand-logo img { display:block; width:100%; height:100%; object-fit:contain; }
+    main { padding:72px 0 80px; }
+    .eyebrow { margin:0 0 12px; color:var(--primary); font-size:14px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; }
+    h1 { max-width:760px; margin:0; font-size:clamp(36px,5vw,48px); line-height:1.17; letter-spacing:-.02em; }
+    .intro { max-width:660px; margin:20px 0 40px; color:var(--muted); font-size:18px; line-height:1.56; }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+    .card { position:relative; display:block; min-height:176px; padding:24px; overflow:hidden; border:1px solid var(--border); border-radius:var(--radius-card); background:var(--surface); color:inherit; text-decoration:none; transition:border-color 180ms ease-out,box-shadow 180ms ease-out,transform 180ms ease-out; }
+    .card:hover { border-color:var(--primary); box-shadow:0 8px 24px rgb(15 35 55 / 10%); transform:translateY(-2px); }
+    .card:focus-visible { outline:3px solid var(--primary-soft); outline-offset:3px; }
+    .card h2 { margin:0 0 8px; font-size:22px; line-height:1.36; }
+    .card p { max-width:420px; margin:0; color:var(--muted); }
+    .card span { position:absolute; right:24px; bottom:20px; color:var(--primary); font-size:14px; font-weight:600; }
+    footer { padding:24px 0; border-top:1px solid var(--border); color:var(--muted); font-size:14px; }
+    @media (prefers-color-scheme:dark) { .card:hover { box-shadow:none; background:var(--surface-raised); } }
+    @media (max-width:680px) { .shell { width:min(100% - 32px,1120px); } main { padding:48px 0 56px; } .grid { grid-template-columns:1fr; } .intro { font-size:16px; } }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition-duration:.01ms!important; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell">
+      <a class="brand" href="/" aria-label="Kitsos API Docs – Startseite">
+        <picture class="brand-logo">
+          <source media="(prefers-color-scheme: dark)" srcset="https://cdn.kitsos.net/logos/k-dark.png">
+          <img src="https://cdn.kitsos.net/logos/k.png" alt="Kitsos">
+        </picture>
+        <span>Kitsos API Docs</span>
+      </a>
+    </div>
+  </header>
+  <main class="shell">
+    <p class="eyebrow">Developer documentation</p>
+    <h1>Die Kitsos APIs, an einem Ort.</h1>
+    <p class="intro">Interaktive Referenzen mit Endpunkten, Parametern und Beispielanfragen. Wähle eine API, um direkt in Swagger loszulegen.</p>
+    <section class="grid" aria-label="Verfügbare API-Dokumentationen">
+      <a class="card" href="/keys">
+        <h2>Keys API</h2>
+        <p>Verwalte Nutzer, Apps, Richtlinien, API-Keys, Limits und Audit-Logs.</p>
+        <span>Dokumentation öffnen →</span>
+      </a>
+      <a class="card" href="/keys-admin">
+        <h2>Keys Admin API</h2>
+        <p>Verwalte Apps, Gruppen, Richtlinien und die Plattform als Administrator.</p>
+        <span>Dokumentation öffnen →</span>
+      </a>
+      <a class="card" href="/mail">
+        <h2>Mail API</h2>
+        <p>Versende E-Mails und verwalte Vorlagen sowie Webhooks.</p>
+        <span>Dokumentation öffnen →</span>
+      </a>
+      <a class="card" href="/verify">
+        <h2>Verify API</h2>
+        <p>Verifiziere die Inhaberschaft von Domains und E-Mail-Adressen.</p>
+        <span>Dokumentation öffnen →</span>
+      </a>
+      <a class="card" href="/hme">
+        <h2>Hide My Email API</h2>
+        <p>Erstelle und verwalte geschützte Weiterleitungs-Aliase.</p>
+        <span>Dokumentation öffnen →</span>
+      </a>
+      <a class="card" href="/utility">
+        <h2>Utility API</h2>
+        <p>Nutze allgemeine Hilfsfunktionen und Service-Endpunkte.</p>
+        <span>Dokumentation öffnen →</span>
+      </a>
+    </section>
+  </main>
+  <footer><div class="shell">© Kitsos</div></footer>
+  <script>
+    (() => { const cdns = ["https://cdn.kitsos.net", "https://cdn2.kitsos.net", "https://cdn3.kitsos.net"]; document.querySelectorAll("img[src^='https://cdn']").forEach((image) => { const path = new URL(image.currentSrc || image.src).pathname; let index = 1; image.addEventListener("error", () => { if (index < cdns.length) { image.closest("picture")?.querySelectorAll("source").forEach((source) => source.remove()); image.src = cdns[index++] + path; } }); }); })();
+  </script>
+</body>
+</html>
