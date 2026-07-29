@@ -7,6 +7,7 @@
   <meta name="color-scheme" content="light dark">
   <title>Seite nicht gefunden · Kitsos API Docs</title>
   <link rel="icon" type="image/png" href="https://cdn.kitsos.net/logos/fav/favicon-96x96.png">
+  <link rel="stylesheet" href="/consent.css">
   <style>
     @font-face { font-family:"Kitsos Default"; src:url("https://cdn.kitsos.net/fonts/kitsos-default/kitsos-default-regular.woff2") format("woff2"),url("https://cdn2.kitsos.net/fonts/kitsos-default/kitsos-default-regular.woff2") format("woff2"),url("https://cdn3.kitsos.net/fonts/kitsos-default/kitsos-default-regular.woff2") format("woff2"); font-weight:100 900; font-display:swap; }
     :root { color-scheme:light dark; --primary:#0768bb; --primary-hover:#055a9f; --primary-soft:#e7f2fc; --bg:#f7f9fc; --surface:#fff; --text:#111827; --muted:#52606d; --border:#dce5ee; --font:"Kitsos Default",Arial,Helvetica,sans-serif; }
@@ -37,8 +38,10 @@
     <p>Die angeforderte API-Dokumentation wurde nicht gefunden. Auf der Startseite findest du alle verfügbaren Dokumentationen.</p>
     <a class="button" href="/">Zu den API Docs</a>
   </main>
+  <div class="consent" id="consent"><div class="consent-inner"><div class="consent-text">Wir verwenden Cookies für Analysen zur Verbesserung unserer Dienste. <a href="https://kitsos.net/privacy">Mehr erfahren</a>.</div><div class="consent-btns"><button class="consent-accept" type="button">Akzeptieren</button><button class="consent-decline" type="button">Ablehnen</button></div></div></div>
   <script>
     (() => { const cdns = ["https://cdn.kitsos.net", "https://cdn2.kitsos.net", "https://cdn3.kitsos.net"]; document.querySelectorAll("img[src^='https://cdn']").forEach((image) => { const path = new URL(image.currentSrc || image.src).pathname; let index = 1; image.addEventListener("error", () => { if (index < cdns.length) { image.closest("picture")?.querySelectorAll("source").forEach((source) => source.remove()); image.src = cdns[index++] + path; } }); }); })();
   </script>
+  <script src="/consent.js"></script>
 </body>
 </html>
