@@ -14,6 +14,7 @@
   <link id="swagger-css" rel="stylesheet" href="https://cdn.kitsos.net/api/swagger/5.29.1/swagger-ui.min.css" onerror="kitsosStylesheetFallback(this, '/api/swagger/5.29.1/swagger-ui.min.css')">
   <link rel="icon" type="image/png" href="https://cdn.kitsos.net/logos/fav/favicon-96x96.png">
   <link rel="preconnect" href="https://cdn.kitsos.net" crossorigin>
+  <link rel="stylesheet" href="/consent.css">
   <style>
     @font-face { font-family: "Kitsos Default"; src: url("https://cdn.kitsos.net/fonts/kitsos-default/kitsos-default-regular.woff2") format("woff2"),url("https://cdn2.kitsos.net/fonts/kitsos-default/kitsos-default-regular.woff2") format("woff2"),url("https://cdn3.kitsos.net/fonts/kitsos-default/kitsos-default-regular.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
     :root { color-scheme: light dark; --k-primary:#0768bb; --k-primary-hover:#055a9f; --k-primary-soft:#e7f2fc; --k-bg:#f7f9fc; --k-surface:#fff; --k-surface-raised:#fff; --k-text:#111827; --k-text-muted:#52606d; --k-border:#dce5ee; --k-radius-control:10px; --k-radius-card:12px; --k-font:"Kitsos Default",Arial,Helvetica,sans-serif; }
@@ -84,6 +85,7 @@
     <nav class="app-header__actions" aria-label="Externe Links"><a href="https://status.kitsos.net">Status</a><a href="https://kitsos.net/contact">Kontakt</a></nav>
   </header>
   <div id="openapi"></div>
+  <div class="consent" id="consent"><div class="consent-inner"><div class="consent-text">Wir verwenden Cookies für Analysen zur Verbesserung unserer Dienste. <a href="https://kitsos.net/privacy">Mehr erfahren</a>.</div><div class="consent-btns"><button class="consent-accept" type="button">Akzeptieren</button><button class="consent-decline" type="button">Ablehnen</button></div></div></div>
   <script>
     const CDNS = ["https://cdn.kitsos.net", "https://cdn2.kitsos.net", "https://cdn3.kitsos.net"];
     async function firstAvailable(path) {
@@ -115,5 +117,6 @@
     function showError(message) { document.getElementById("openapi").innerHTML = `<main class="swagger-ui"><section class="info"><p>${message}</p></section></main>`; }
     window.addEventListener("load", loadSwagger);
   </script>
+  <script src="/consent.js"></script>
 </body>
 </html>
