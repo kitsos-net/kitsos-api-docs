@@ -43,5 +43,6 @@
     (() => { const cdns = ["https://cdn.kitsos.net", "https://cdn2.kitsos.net", "https://cdn3.kitsos.net"]; document.querySelectorAll("img[src^='https://cdn']").forEach((image) => { const path = new URL(image.currentSrc || image.src).pathname; let index = 1; image.addEventListener("error", () => { if (index < cdns.length) { image.closest("picture")?.querySelectorAll("source").forEach((source) => source.remove()); image.src = cdns[index++] + path; } }); }); })();
   </script>
   <script src="/consent.js"></script>
+  <script src="/utm-links.js"></script>
 </body>
 </html>

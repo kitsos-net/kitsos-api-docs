@@ -99,5 +99,6 @@
     (() => { const language = document.querySelector("#language"); const selected = new URLSearchParams(location.search).get("lang") || localStorage.getItem("kitsos-docs-language") || navigator.language.slice(0, 2); language.value = ["de", "en", "el"].includes(selected) ? selected : "de"; document.documentElement.lang = language.value; language.addEventListener("change", () => { localStorage.setItem("kitsos-docs-language", language.value); document.documentElement.lang = language.value; const url = new URL(location.href); url.searchParams.set("lang", language.value); history.replaceState(null, "", url); }); })();
   </script>
   <script src="/consent.js"></script>
+  <script src="/utm-links.js"></script>
 </body>
 </html>
