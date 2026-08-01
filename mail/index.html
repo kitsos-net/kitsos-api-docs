@@ -109,7 +109,7 @@
       let index = 1;
       stylesheet.addEventListener("error", () => { if (index < CDNS.length) stylesheet.href = CDNS[index++] + "/api/swagger/5.29.1/swagger-ui.min.css"; });
     }
-    async function loadSwagger() { try { addAssetFallbacks(); await loadScript("/api/swagger/5.29.1/swagger-ui-bundle.min.js"); await loadScript("/api/swagger/5.29.1/swagger-ui-standalone-preset.min.js"); window.openapiUrl = await firstAvailable("/api/mail/openapi.yaml"); initSwagger(); } catch (error) { showError("Die API-Dokumentation konnte nicht initialisiert werden. Bitte lade die Seite erneut."); } }
+    async function loadSwagger() { try { addAssetFallbacks(); await loadScript("/api/swagger/5.29.1/swagger-ui-bundle.min.js"); await loadScript("/api/swagger/5.29.1/swagger-ui-standalone-preset.min.js"); window.openapiUrl = await firstAvailable("/api/mail/openapi-1.0.0.yaml"); initSwagger(); } catch (error) { showError("Die API-Dokumentation konnte nicht initialisiert werden. Bitte lade die Seite erneut."); } }
     function initSwagger() {
       if (typeof SwaggerUIBundle === "undefined" || typeof SwaggerUIStandalonePreset === "undefined") return setTimeout(initSwagger, 50);
       window.ui = SwaggerUIBundle({ url: window.openapiUrl, dom_id: "#openapi", deepLinking: true, displayRequestDuration: true, docExpansion: "list", defaultModelsExpandDepth: -1, defaultModelExpandDepth: 2, validatorUrl: null, presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset], layout: "StandaloneLayout" });
